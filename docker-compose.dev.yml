@@ -25,6 +25,10 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
       KAFKA_BROKER_ID: 1
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      CONTROL_CENTER_REPLICATION_FACTOR: 3
+      KAFKA_BROKER_RACK: rack-1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_CREATE_TOPICS: "Topic1:1:3"
     volumes:
       - ./data/kafka1/data:/var/lib/kafka/data
     depends_on:
@@ -41,6 +45,11 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_BROKER_ID: 2
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      CONTROL_CENTER_REPLICATION_FACTOR: 3
+      KAFKA_BROKER_RACK: rack-2
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_CREATE_TOPICS: "Topic1:1:3"
     volumes:
       - ./data/kafka2/data:/var/lib/kafka/data
     depends_on:
@@ -58,6 +67,10 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
       KAFKA_BROKER_ID: 3
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      CONTROL_CENTER_REPLICATION_FACTOR: 3
+      KAFKA_BROKER_RACK: rack-3
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_CREATE_TOPICS: "Topic1:1:3"
     volumes:
       - ./data/kafka3/data:/var/lib/kafka/data
     depends_on:
@@ -74,58 +87,3 @@ services:
       - kafka1
       - kafka2
       - kafka3
-# version: "3"
-
-# services:
-#   zookeeper:
-#     image: wurstmeister/zookeeper
-#     container_name: zookeeper
-#     ports:
-#       - 2181:2181
-
-#   broker1:
-#     image: wurstmeister/kafka
-#     container_name: broker1
-#     hostname: broker1
-#     depends_on:
-#       - zookeeper
-#     ports:
-#       - "19092:19092"
-#     environment:
-#       KAFKA_BROKER_ID: 1
-#       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-#       KAFKA_ADVERTISED_LISTENERS: INSIDE://broker1:9092,OUTSIDE://localhost:19092
-#       KAFKA_LISTENERS: INSIDE://:9092,OUTSIDE://:19092
-#       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
-#       KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
-#     volumes:
-#       - /var/run/docker.sock:/var/run/docker.sock
-
-#   broker2:
-#     image: wurstmeister/kafka
-#     container_name: broker2
-#     hostname: broker2
-#     depends_on:
-#       - zookeeper
-#     ports:
-#       - "29092:29092"
-#     environment:
-#       KAFKA_BROKER_ID: 2
-#       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-#       KAFKA_ADVERTISED_LISTENERS: INSIDE://broker2:9092,OUTSIDE://localhost:29092
-#       KAFKA_LISTENERS: INSIDE://:9092,OUTSIDE://:29092
-#       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
-#       KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
-#     volumes:
-#       - /var/run/docker.sock:/var/run/docker.sock
-
-#   kafdrop:
-#     image: obsidiandynamics/kafdrop
-#     restart: "no"
-#     ports:
-#       - "9000:9000"
-#     environment:
-#       KAFKA_BROKERCONNECT: "broker1:9092"
-#     depends_on:
-#       - broker1
-#       - broker2
