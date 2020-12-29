@@ -3,10 +3,12 @@ import asyncio
 
 
 async def send_one():
-    producer = AIOKafkaProducer(bootstrap_servers=["localhost:9092"])
+    producer = AIOKafkaProducer(
+        bootstrap_servers=["localhost:9091", "localhost:9092", "localhost:9093"],
+    )
     await producer.start()
     try:
-        await producer.send_and_wait("Topic", b"message")
+        await producer.send_and_wait("Topic_1", b"message")
     finally:
         await producer.stop()
 

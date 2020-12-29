@@ -4,8 +4,8 @@ import asyncio
 
 async def consume():
     consumer = AIOKafkaConsumer(
-        "Topic",
-        bootstrap_servers=["localhost:9092"],
+        "Topic_1",
+        bootstrap_servers=["localhost:9091", "localhost:9092", "localhost:9093"],
         group_id="Redis",
         enable_auto_commit=False,
     )
