@@ -1,0 +1,72 @@
+version: "3"
+services:
+  trading:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.dev
+    ports:
+      - 8001:8000
+    env_file:
+      - ./secrets/.env.development
+    volumes:
+      - .:/workspace
+      - trading-packages:/usr/local/lib/python3.7/site-packages/
+      - trading-bin:/usr/local/bin
+    command: /bin/bash scripts/start-dev.sh
+    networks:
+      - db-network
+      - redis-network
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: postgres:12.1-alpine
+    env_file:
+      - secrets/.env.development
+    volumes:
+      - db-volume:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    networks:
+      - db-network
+    environment:
+      - POSTGRES_DB=trading
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_INITDB_ARGS=--encoding=UTF-8
+
+  redis:
+    image: redis:6.0.1-alpine
+    ports:
+      - 6379:6379
+    networks:
+      - redis-network
+
+  test-feed:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.dev
+    env_file:
+      - ./secrets/.env.development
+    volumes:
+      - .:/workspace
+      - trading-packages:/usr/local/lib/python3.7/site-packages/
+      - trading-bin:/usr/local/bin
+    command: /bin/bash scripts/test_feed.sh
+    networks:
+      - redis-network
+    depends_on:
+      - trading
+      - redis
+
+networks:
+  db-network:
+    driver: bridge
+  redis-network:
+    driver: bridge
+
+volumes:
+  db-volume:
+  trading-packages:
+  trading-bin:
