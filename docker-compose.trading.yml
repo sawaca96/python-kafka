@@ -48,8 +48,8 @@ services:
     ports:
       - 3000:3000
     user: "104"
-    volumes: :
-    - grafana-storage:/var/lib/grafana
+    volumes:
+      - grafana-storage:/var/lib/grafana
     environment:
       - GRAFANA_VERSION=latest
       - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource
