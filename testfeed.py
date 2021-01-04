@@ -5,7 +5,7 @@ import asyncio
 
 import aioredis
 
-from trading.config import REDIS_ORDER
+from trading.config import REDIS_PRICE
 
 
 class TestFeed:
@@ -13,10 +13,10 @@ class TestFeed:
         self.rs = None
 
     async def setup(self):
-        self.rs = await aioredis.create_redis_pool(REDIS_ORDER["address"])
+        self.rs = await aioredis.create_redis_pool(REDIS_PRICE["address"])
 
 
-async def publich_socket():
+async def publish_socket():
     test_code = ["005930", "005940", "005950", "005960"]
     test_dumy1 = list(range(50000, 60000, 100))
     test_dumy2 = list(range(5000, 5500, 50))
