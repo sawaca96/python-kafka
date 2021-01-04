@@ -35,4 +35,4 @@ async def publish_socket():
 
 
 if __name__ == "__main__":
-    asyncio.run(publich_socket())
+    asyncio.run(publish_socket())
