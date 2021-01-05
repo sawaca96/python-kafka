@@ -29,6 +29,9 @@ REDIS_PRICE = {
     "maxsize": int(get_env("REDIS_POOL_MAX", "10")),
 }
 
+KAFKA_BOOTSTRAP_SERVERS = get_env(
+    "KAFKA_BOOTSTRAP_SERVERS", "broker-1:29091,broker-2:29092,broker-3:29093"
+).split(",")
 
 CORS_ORIGINS = get_env(
     "CORS_ORIGINS", "http://127.0.0.1:8080,http://localhost:8080"
