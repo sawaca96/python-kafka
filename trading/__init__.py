@@ -10,6 +10,16 @@ db = Gino()
 redis_client = RedisClient()
 
 
+def init_views(app):
+    from trading import views  # noqa
+
+    @app.get("/ping")
+    async def ping():
+        return "pong"
+
+    app.include_router(views.router, prefix="/trading")
+
+
 def create_app():
     """
     Create FastAPI application
@@ -28,6 +38,8 @@ def create_app():
         allow_methods=["*"],
         allow_headers=["*"],
     )
+
+    init_views(app)
 
     @app.on_event("startup")
     async def startup():
