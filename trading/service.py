@@ -20,16 +20,21 @@ async def create_account(account: Dict[str, Any]) -> Account:
 async def fetch_accounts() -> List[Dict[str, Any]]:
     query = db.select([Account])
     accounts = await fetch_all(query)
-    return accounts.to_dict()
+    return accounts
 
 
 async def create_order(order: Dict[str, Any]) -> Order:
     order_id = uuid4()
-    order = await Order.create(id=order_id, unfilled=order.quantity, **order)
-    return Order.to_dict()
+    order = await Order.create(id=order_id, unfilled=order["quantity"], **order)
+    return order.to_dict()
 
 
 async def fetch_order() -> List[Dict[str, Any]]:
     query = db.select([Order])
     orders = await fetch_all(query)
-    return order.to_dict()
+    return orders
+
+
+async def delete_order(order_id: str):
+    query = Order.delete.where(Order.id == order_id)
+    await query.gino.status()

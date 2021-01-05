@@ -10,7 +10,7 @@ class Account(BaseModel):
 
 
 class Order(BaseModel):
-    account_id = UUID
+    account_id: UUID
     code: str
     price: int
     quantity: int

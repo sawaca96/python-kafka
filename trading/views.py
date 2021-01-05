@@ -34,14 +34,15 @@ async def fetch_order():
 @router.post("/order", status_code=HTTP_201_CREATED)
 async def create_order(order: Order):
     order = order.dict()
-    await service.create_order(order)
+    data = await service.create_order(order)
+    return data
 
 
-@router.put("/order/{order_id}", status_code=HTTP_202_ACCEPTED)
-async def update_order():
-    pass
+# @router.put("/order/{order_id}", status_code=HTTP_202_ACCEPTED)
+# async def update_order():
+#     pass
 
 
 @router.delete("/order/{order_id}", status_code=HTTP_204_NO_CONTENT)
-async def delete_order():
-    pass
+async def delete_order(order_id: str):
+    await service.delete_order(order_id)
