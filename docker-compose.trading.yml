@@ -13,8 +13,6 @@ services:
       - trading-packages:/usr/local/lib/python3.7/site-packages/
       - trading-bin:/usr/local/bin
     command: /bin/bash scripts/start-dev.sh
-    # networks:
-    #   - trading-network
     depends_on:
       - db
       - redis
@@ -27,8 +25,6 @@ services:
       - db-volume:/var/lib/postgresql/data
     ports:
       - 5432:5432
-    # networks:
-    #   - trading-network
     environment:
       - POSTGRES_DB=trading
       - POSTGRES_USER=user
@@ -39,8 +35,6 @@ services:
     image: redis:6.0.1-alpine
     ports:
       - 6379:6379
-    # networks:
-    #   - trading-network
 
   grafana:
     image: grafana/grafana:latest
@@ -66,8 +60,6 @@ services:
       - trading-packages:/usr/local/lib/python3.7/site-packages/
       - trading-bin:/usr/local/bin
     command: /bin/bash scripts/test_feed.sh
-    # networks:
-    #   - trading-network
     depends_on:
       - trading
       - redis
