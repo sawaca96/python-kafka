@@ -2,7 +2,6 @@ from fastapi import APIRouter
 from starlette.status import (
     HTTP_200_OK,
     HTTP_201_CREATED,
-    HTTP_202_ACCEPTED,
     HTTP_204_NO_CONTENT,
 )
 
