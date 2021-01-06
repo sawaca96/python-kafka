@@ -1,3 +1,6 @@
+from uuid import uuid4
+
+import orjson
 from fastapi import APIRouter
 from starlette.status import (
     HTTP_200_OK,
@@ -7,8 +10,8 @@ from starlette.status import (
 )
 
 from trading.schema import Account, Order
-from trading import service
-from trading import kafka
+from trading import service, kafka, consumer
+
 
 router = APIRouter()
 
@@ -35,9 +38,13 @@ async def fetch_order():
 @router.post("/order", status_code=HTTP_201_CREATED)
 async def create_order(order: Order):
     order = order.dict()
+    order["id"] = uuid4()
+
     # you have to add validation of order
-    await kafka.produce_order(order)
-    return order
+
+    record_data = await kafka.produce_order(order)
+    order = await consumer.get_one(record_data.topic_partition, record_data.offset)
+    return orjson.loads(order.value)
 
 
 # @router.put("/order/{order_id}", status_code=HTTP_202_ACCEPTED)

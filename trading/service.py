@@ -24,8 +24,7 @@ async def fetch_accounts() -> List[Dict[str, Any]]:
 
 
 async def create_order(order: Dict[str, Any]) -> Order:
-    order_id = uuid4()
-    order = await Order.create(id=order_id, unfilled=order["quantity"], **order)
+    order = await Order.create(unfilled=order["quantity"], **order)
     return order.to_dict()
 
 
