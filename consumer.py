@@ -6,7 +6,7 @@ async def consume():
     consumer = AIOKafkaConsumer(
         "Order",
         bootstrap_servers=["localhost:9091", "localhost:9092", "localhost:9093"],
-        group_id="Broker",
+        group_id="Test",
         enable_auto_commit=False,
     )
     # Get cluster layout and join group `my-group`
