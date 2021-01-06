@@ -10,8 +10,8 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
     volumes:
-      - /vol1/zk-data:/var/lib/zookeeper/data
-      - /vol2/zk-txn-logs:/var/lib/zookeeper/log
+      - zookeeper-data:/var/lib/zookeeper/data
+      - zookeeper-txn-logs:/var/lib/zookeeper/log
 
   broker-1:
     image: confluentinc/cp-server:6.0.1
@@ -47,7 +47,7 @@ services:
       # KAFKA_CONFLUENT_LICENSE_TOPIC_REPLICATION_FACTOR: 1
 
     volumes:
-      - /vol3/kafka1-data:/var/lib/kafka/data
+      - broker1-data:/var/lib/kafka/data
 
   schema-registry-1:
     image: confluentinc/cp-schema-registry:6.0.1
@@ -95,7 +95,7 @@ services:
       # KAFKA_CONFLUENT_LICENSE_TOPIC_REPLICATION_FACTOR: 1
 
     volumes:
-      - /vol3/kafka2-data:/var/lib/kafka/data
+      - broker2-data:/var/lib/kafka/data
 
   schema-registry-2:
     image: confluentinc/cp-schema-registry:6.0.1
@@ -143,7 +143,7 @@ services:
       # KAFKA_CONFLUENT_LICENSE_TOPIC_REPLICATION_FACTOR: 1
 
     volumes:
-      - /vol3/kafka3-data:/var/lib/kafka/data
+      - broker3-data:/var/lib/kafka/data
 
   schema-registry-3:
     image: confluentinc/cp-schema-registry:6.0.1
@@ -192,3 +192,10 @@ networks:
   default:
     external:
       name: kafka_network
+
+volumes:
+  zookeeper-txn-logs:
+  zookeeper-data:
+  broker1-data:
+  broker2-data:
+  broker3-data:
