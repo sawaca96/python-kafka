@@ -42,9 +42,8 @@ async def create_order(order: Order):
 
     # you have to add validation of order
 
-    record_data = await kafka.produce_order(order)
-    order = await consumer.get_one(record_data.topic_partition, record_data.offset)
-    return orjson.loads(order.value)
+    await kafka.produce_order(order)
+    return {"message": "success"}
 
 
 # @router.put("/order/{order_id}", status_code=HTTP_202_ACCEPTED)
