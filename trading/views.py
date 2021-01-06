@@ -4,12 +4,12 @@ from fastapi import APIRouter
 from starlette.status import (
     HTTP_200_OK,
     HTTP_201_CREATED,
-    # HTTP_202_ACCEPTED,
     HTTP_204_NO_CONTENT,
 )
 
 from trading.schema import Account, Order
 from trading import service, order_producer
+from trading.broker import Broker
 
 
 router = APIRouter()
@@ -42,11 +42,9 @@ async def create_order(order: Order):
     return {"message": "success"}
 
 
-# @router.put("/order/{order_id}", status_code=HTTP_202_ACCEPTED)
-# async def update_order():
-#     pass
-
-
 @router.delete("/order/{order_id}", status_code=HTTP_204_NO_CONTENT)
 async def delete_order(order_id: str):
+    # name = "real:005930"
+    # feed = await Broker.get(name)
+    # feed.destroy()
     await service.delete_order(order_id)
