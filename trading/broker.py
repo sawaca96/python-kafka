@@ -64,7 +64,6 @@ class Broker:
         await self.pubsub.wait_message()
         data = await self.pubsub.get(encoding="utf-8")
         data = orjson.loads(data)
-        print(data)
         return data
 
     async def destroy(self) -> None:
