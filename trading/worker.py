@@ -1,5 +1,9 @@
 import asyncio
 
+import orjson
+import tenacity
+from trading.service import create_order
+
 
 class ConsumerWorker:
     def __init__(self, consumer):
@@ -25,9 +29,14 @@ class ConsumerWorker:
                         msg.timestamp,
                     )
                 )
-                await self.consumer.commit()
+                await self._commit_order(orjson.loads(msg.value))
         finally:
             await self.consumer.stop()
+
+    @tenacity.retry(wait=tenacity.wait_fixed(2))
+    async def _commit_order(self, order):
+        await create_order(order)
+        await self.consumer.commit()
 
     async def _consume_position(self):
         try:

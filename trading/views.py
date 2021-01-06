@@ -38,9 +38,6 @@ async def fetch_order():
 async def create_order(order: Order):
     order = order.dict()
     order["id"] = uuid4()
-
-    # you have to add validation of order
-
     await order_producer.produce(order)
     return {"message": "success"}
 
