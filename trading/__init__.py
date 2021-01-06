@@ -3,9 +3,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import ORJSONResponse
 from gino import Gino
 
-from .config import DB_URL, CORS_ORIGINS, KAFKA_BOOTSTRAP_SERVERS
-from .redis import RedisClient
-from .kafka import Consumer
+from trading.config import DB_URL, CORS_ORIGINS, KAFKA_BOOTSTRAP_SERVERS
+from trading.redis import RedisClient
+from trading.kafka import Consumer
 
 db = Gino()
 redis_client = RedisClient()
