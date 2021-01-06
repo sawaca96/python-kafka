@@ -5,22 +5,29 @@ from gino import Gino
 
 from trading.config import DB_URL, CORS_ORIGINS, KAFKA_BOOTSTRAP_SERVERS
 from trading.redis import RedisClient
-from trading.kafka import Consumer, Producer
+from trading.producer import Producer
 
 db = Gino()
 redis_client = RedisClient()
-order_consumer = Consumer(
-    "Order",
-    bootstrap_servers=KAFKA_BOOTSTRAP_SERVERS,
-    group_id="Broker",
-    enable_auto_commit=False,
-)
 order_producer = Producer(
     "Order",
     bootstrap_servers=KAFKA_BOOTSTRAP_SERVERS,
     acks="all",
     enable_idempotence=True,
 )
+
+
+def get_consumer(topic):
+    from trading.consumer import Consumer  # noqa
+
+    consumer = Consumer(
+        topic,
+        bootstrap_servers=KAFKA_BOOTSTRAP_SERVERS,
+        group_id="Broker",
+        enable_auto_commit=False,
+    )
+
+    return consumer
 
 
 def init_views(app):
@@ -53,6 +60,8 @@ def create_app():
     )
 
     init_views(app)
+
+    order_consumer = get_consumer("Order")
 
     @app.on_event("startup")
     async def startup():
