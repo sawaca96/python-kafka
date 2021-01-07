@@ -62,3 +62,16 @@ class Order(TimeStampedModel):
     price = db.Column(db.Integer)
     side = db.Column(db.String)
     unfilled = db.Column(db.Integer)
+
+
+class Position(TimeStampedModel):
+    __tablename__ = "position"
+
+    id = db.Column(UUID, primary_key=True)
+    account_id = db.Column(UUID, db.ForeignKey("account.id"))
+    code = db.Column(db.String)
+    price = db.Column(db.Float)
+    quantity = db.Column(db.Integer)
+    closed = db.Column(db.Boolean, default=False)
+
+    _unique = db.UniqueConstraint("id", "code")

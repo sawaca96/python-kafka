@@ -3,7 +3,7 @@ from uuid import uuid4
 
 from trading import db
 from trading.utils import fetch_all
-from trading.models import Order, Account
+from trading.models import Order, Account, Position
 
 
 async def create_account(account: Dict[str, Any]) -> Account:
@@ -37,3 +37,9 @@ async def fetch_order() -> List[Dict[str, Any]]:
 async def delete_order(order_id: str):
     query = Order.delete.where(Order.id == order_id)
     await query.gino.status()
+
+
+async def create_position(account_id: str, position: Dict[str, Any]):
+    position_id = uuid4()
+    position = await Position.create(id=position_id, **position)
+    return position.to_dict()

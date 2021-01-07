@@ -13,6 +13,12 @@ order_producer = Producer(
     acks="all",
     enable_idempotence=True,
 )
+position_producer = Producer(
+    "Position",
+    bootstrap_servers=KAFKA_BOOTSTRAP_SERVERS,
+    acks="all",
+    enable_idempotence=True,
+)
 
 
 def get_consumer(topic):

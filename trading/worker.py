@@ -67,3 +67,10 @@ class ConsumerWorker:
             await self.consumer.commit()
         finally:
             await self.consumer.stop()
+
+    @tenacity.retry(wait=tenacity.wait_fixed(2), reraise=True)
+    async def _commit_position(self, order):
+        await create_order(order)
+        await self.redis_client.hset(order["id"], "order", orjson.dumps(order))
+        await self.register_order(order)
+        await self.consumer.commit()

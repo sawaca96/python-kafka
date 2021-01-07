@@ -5,6 +5,8 @@ import orjson
 import aioredis
 
 from trading.redis import RedisClient
+from trading.service import create_position
+from trading import position_producer
 
 
 class FeedCache(dict):
@@ -58,6 +60,7 @@ class Broker:
                 continue
             if not data:
                 continue
+            await self._send_data_to_executor(data)
 
     async def _get_stream_data(self) -> Dict[str, Any]:
         """Get stream dat a from redis channel"""
@@ -65,6 +68,11 @@ class Broker:
         data = await self.pubsub.get(encoding="utf-8")
         data = orjson.loads(data)
         return data
+
+    async def _send_data_to_executor(self, order):
+        await position_producer.produce()
+        await create_position(order["account_id"], order)
+        self.destroy()
 
     async def destroy(self) -> None:
         async with self.lock:
